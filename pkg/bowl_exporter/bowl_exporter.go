@@ -97,34 +97,27 @@ func (bsc *BowlScoreboardClient) recordMetrics(scoreboad *ScoreboardResponse) {
 			score, _ := strconv.Atoi(competitor.Score)
 
 			bsc.metrics.score.WithLabelValues(bowlName, venueName, bowlDate,
-				bowlDateTime, teamLocation, teamName, record).Set(float64(score))
+				bowlDateTime, competitor.HomeAway, teamName, record).Set(float64(score))
 
 			bsc.metrics.quarter.WithLabelValues(bowlName, venueName, bowlDate,
-				bowlDateTime, teamLocation, teamName, record).Set(float64(competition.Status.Period))
+				bowlDateTime, competitor.HomeAway, teamLocation, teamName, record).Set(float64(competition.Status.Period))
 
 			bsc.metrics.timeRemaining.WithLabelValues(bowlName, venueName, bowlDate,
-				bowlDateTime, teamLocation, teamName, record).Set(float64(competition.Status.Clock))
+				bowlDateTime, competitor.HomeAway, teamLocation, teamName, record).Set(float64(competition.Status.Clock))
 
 			winner := 0
 			if competitor.Winner != nil && *competitor.Winner {
 				winner = 1
 			}
 			bsc.metrics.winner.WithLabelValues(bowlName, venueName, bowlDate,
-				bowlDateTime, teamLocation, teamName, record).Set(float64(winner))
+				bowlDateTime, competitor.HomeAway, teamLocation, teamName, record).Set(float64(winner))
 
 			inProgress := 0
 			if competition.GetGameStatus() == InProgress {
 				inProgress = 1
 			}
 			bsc.metrics.inProgress.WithLabelValues(bowlName, venueName, bowlDate,
-				bowlDateTime, teamLocation, teamName, record).Set(float64(inProgress))
-
-			homeTeam := 0
-			if competitor.HomeAway == "home" {
-				homeTeam = 1
-			}
-			bsc.metrics.homeTeam.WithLabelValues(bowlName, venueName, bowlDate,
-				bowlDateTime, teamLocation, teamName, record).Set(float64(homeTeam))
+				bowlDateTime, competitor.HomeAway, teamLocation, teamName, record).Set(float64(inProgress))
 		}
 	}
 
