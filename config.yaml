@@ -1,0 +1,6 @@
+
+api_endpoint: http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard
+fetch_interval: 60s
+
+prom:
+  port: 9180
